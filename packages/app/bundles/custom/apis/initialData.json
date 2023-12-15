@@ -1,0 +1,12 @@
+[
+    {
+        "id": "miner1",
+        "enabled": true,
+        "status": "stopped"
+    },
+    {
+        "id": "miner2",
+        "enabled": false,
+        "status": "stopped"
+    }
+]

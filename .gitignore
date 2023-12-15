@@ -48,3 +48,7 @@ thumbs.db
 
 # turbo build log
 **/.turbo/*
+
+apps/api/miner1.js
+apps/api/miner1.stderr-4.log
+apps/api/miner1.stdout-4.log

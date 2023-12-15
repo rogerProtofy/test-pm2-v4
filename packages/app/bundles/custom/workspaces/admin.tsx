@@ -1,4 +1,4 @@
-import { Cog, Inbox, Library, ToyBrick } from '@tamagui/lucide-icons'
+import { Cog, Inbox, Library, ToyBrick, Wrench } from '@tamagui/lucide-icons'
 
 export default {
     "default": "/admin/events",
@@ -16,7 +16,8 @@ export default {
             { "name": "Files", "icon": "folder", "type": "files", "path": "/packages/app/bundles/custom" },    
             { "name": "Messages", "icon": Inbox, "type": "messages", "path": "/"},
             { "name": "Resources", "icon": Library, "type": "resources", "path": "/"},
-            { "name": "Databases", "icon": "database", "type": "databases", "path": "/"}
+            { "name": "Databases", "icon": "database", "type": "databases", "path": "/"},
+            { "name": "Services", "icon": Wrench, "type": "services", "path": "/"}
         ],
         "Devices":[
             { "name": "Devices", "icon": "serverConf", "type":"devices", "path": "/"},
