@@ -75,10 +75,26 @@ export function ListContainersPage({ initialElements, pageSession }) {
         }
     };
     const serviceMqttData = (realTimeData) => {
+        // console.log("RealTimeData: ", minersData)
         if (!pageLoaded) {
             const realTime = JSON.parse(realTimeData)
+            console.log("realtime: ", realTimeData)
+            // setMinersData(realTimeData); 
             try {
+                const idExists = minersData.some((minero) => minero.id === realTime.id);
+
+                // Si no existe, añadimos un nuevo objeto a minersData
+                if (!idExists) {
+                    const newMinerData = {
+                        id: realTime.id,
+                        status: realTime.status,
+                        cpu: realTime.cpu,
+                        memory: realTime.memory + ' MB',
+                    };
+                    minersData.push(newMinerData);
+                }
                 const updatedMinersData = minersData.map((minero) => {
+                    // console.log("id: ", minero.id)
                     if (minero.id === realTime.id) {
                         return {
                             ...minero,
@@ -86,7 +102,7 @@ export function ListContainersPage({ initialElements, pageSession }) {
                             memory: realTime?.memory + ' MB',
                             status: realTime?.status
                         };
-                    }
+                    } 
                     return minero;
                 });
                 setMinersData(updatedMinersData);      
@@ -145,11 +161,15 @@ export function ListContainersPage({ initialElements, pageSession }) {
                 DataTable2.column("monit", "monit", false, (row) => {        
                     useEffect(() => {
                         /* const time = setInterval(() => { */
+                            if(arraysEqual)
                             fetchInitialData();
                         // }, 3000)
                         // return () => clearInterval(time); 
                     }, [elements]);
-                
+                    const arraysEqual = (arr1, arr2) => {
+                        // Función para comparar si dos arrays son iguales
+                        return JSON.stringify(arr1) === JSON.stringify(arr2);
+                      };
                     useEffect(() => {
                         if (realTimeDataMessage) {
                             try {
