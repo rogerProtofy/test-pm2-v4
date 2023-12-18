@@ -67,6 +67,7 @@ export function IntervalMqtt(app, context) {
                                 const realTimeDataString = JSON.stringify(realTimeData);
                                 // mqttClient.on(realTimeDataString, (topic, message) => {
                                 mqtt.publish('real_time_data_topic', realTimeDataString);
+                                console.log("realTimeDataString", realTimeDataString)
                                 // })
                             } else {
                                 const realTimeData = ([{ name: id, pm2_env: { status: 'stopped' } }]);

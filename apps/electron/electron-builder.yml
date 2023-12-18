@@ -10,4 +10,3 @@ linux:
 #asar: false
 files:
   - "**/*"
-  - "!**/{.next/cache/**/*,.next/cache}"

@@ -1,0 +1,1 @@
+setInterval(() => { console.log('Ejecutando el contenido del contenedor miner3');  }, 1000);

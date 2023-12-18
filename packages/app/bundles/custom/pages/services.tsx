@@ -4,8 +4,7 @@ API.get/API.post will return a PendingResult, with properties like isLoaded, isE
 if you call paginated apis, you will need to wait for result.isLoaded and look into result.data.items, since result.data is an object with the pagination.
 Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "total": 20, "page": 0, "pages": 1}
 */
-
-import {Protofy} from 'protolib/base'
+import {Protofy, z} from 'protolib/base'
 import {Objects} from 'app/bundles/objects'
 import { Theme, YStack, Text, Spacer, XStack, Paragraph, Switch, Button} from "@my/ui"
 import { BlockTitle, Tinted, withSession, Page, useEdit, DataView, DataTable2, API, PaginatedDataSSR, SectionBox, SSR, ContainerLarge} from "protolib"
@@ -29,7 +28,7 @@ export function ListContainersPage({ initialElements, pageSession }) {
     const [visible, setVisible] = useState<boolean>(false)
     const [minersData, setMinersData] = useState([]);
     const [pageLoaded, setPageLoaded] = useState(false);
-
+    const status = ["stopped"]
     const  onPress =  () => {
         setVisible(!visible)  
         if(!visible) {
@@ -161,7 +160,7 @@ export function ListContainersPage({ initialElements, pageSession }) {
                 DataTable2.column("monit", "monit", false, (row) => {        
                     useEffect(() => {
                         /* const time = setInterval(() => { */
-                            if(arraysEqual)
+                            // if(arraysEqual)
                             fetchInitialData();
                         // }, 3000)
                         // return () => clearInterval(time); 
@@ -251,6 +250,19 @@ export function ListContainersPage({ initialElements, pageSession }) {
                     isVisible: (data) => true
                 }
             ]}
+            extraFieldsForms={{
+                status: z.union(status.map(o => z.literal(o))).after('id'),
+            }}
+            // customFields={{
+            //     'status': {
+            //       component: (path, data, setData, mode) => {
+            //         console.log("inputs: ", { path, data, setData, mode })
+            //         if (mode == "preview"){return <></>}
+            //         return <ButtonSimple onPress={(e) => {setShowDialog(true); setIsSaveActive(true); mode=="add"?setSourceCode(defaultJsCode.components):setSourceCode(data.components); setEditedObjectData({path,data,setData,mode});  console.log("inputs: ", { path, data, setData, mode })}}>Edit</ButtonSimple>
+            //       },
+            //       hideLabel: false
+            //     }
+            //   }}
             model={ServiceModel}
             pageState={pageState}
             dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
