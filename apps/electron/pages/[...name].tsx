@@ -2,10 +2,29 @@ import { NextPageContext } from 'next'
 import { useSession, withSession, SSR } from 'protolib'
 import Custom404 from './404'
 import { useRouter } from 'next/router'
-import nextPages from 'app/bundles/electronPages'
+import electronPages from 'app/bundles/electronPages'
 import React from 'react'
 
-const getRoute = (routePath: string | string[] | undefined) => Object.keys(nextPages).find(key => {
+export async function getStaticPaths() {
+  const config = {
+    paths: Object.keys(electronPages).filter(x => !x.includes('*')).map((x) => {
+      return {
+        params: {name: x.split('/')}
+      }
+    }),
+    fallback: false
+  }
+  console.log('precompile config: ', config)
+  return config
+}
+
+export async function getStaticProps(context:any) {
+  return {
+      props: {}
+  };
+}
+
+const getRoute = (routePath: string | string[] | undefined) => Object.keys(electronPages).find(key => {
   if(!routePath) return false
   const path = Array.isArray(routePath) ? (routePath as string[]) : [routePath as string]
   const route = key.split('/')
@@ -23,28 +42,11 @@ const getRoute = (routePath: string | string[] | undefined) => Object.keys(nextP
 
 export default function BundlePage(props: any) {
   useSession(props.pageSession)
+
   const router = useRouter();
   const route = getRoute(router.query.name)
   if(!route) return <Custom404 />
 
-  const page = nextPages[route]
+  const page = (electronPages as any)[route]
   return React.createElement(page.component, {...props})
 }
-
-export const getServerSideProps = SSR(async (context: NextPageContext) => {
-  const route = getRoute(context.query.name)
-
-  if(!route) { //has no exposed pages
-    return withSession(context)
-  }
-
-  const page = nextPages[route]
-
-  if(page.getServerSideProps) {
-    const ret = await page.getServerSideProps(context)
-    //console.log('going to route: ', route, page, ret)
-    return ret
-  }
-
-  return withSession(context)
-})
